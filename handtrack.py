@@ -57,10 +57,9 @@ while True:
                     case 20:
                         cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #pinky
                         print("Pinky Coordinates: ", cx, cy)
-
             # draw skeleton mesh onto hand
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
-
+#h
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
