@@ -1,41 +1,90 @@
+import cvzone
+from cvzone.HandTrackingModule import HandDetector
 import cv2
 import time
-import cvzone
-import numpy as np
-import handtrackmodule as htm
+
 
 pTime = 0
 cTime = 0
 cap = cv2.VideoCapture(0)
 
-detector = htm.HandDetect()
+detector = HandDetector(detectionCon=0.8, maxHands=2)
+
+
+def handPositionStrings(fingers):
+    if fingers == [0, 0, 0, 0, 0]:
+        return "Fist"
+    elif fingers == [0, 1, 1, 0, 0]:
+        return "Peace"
+    elif fingers == [0, 0, 1, 1, 1]:
+        return "Okay"
+    elif fingers == [0, 1, 1, 1, 1]:
+        return "Four"
+    elif fingers == [1, 1, 1, 1, 1]:
+        return "Five"
+    elif fingers == [1, 0, 0, 0, 0]:
+        return "Thumbs up"
+    elif fingers == [0, 1, 1, 1, 0]:
+        return "Three"
+    elif fingers == [0, 0, 1, 0, 0]:
+        return "The Bird"
+    elif fingers == [0, 1, 0, 0, 0]:
+        return "Index up"
+    elif fingers == [0, 0, 0, 0, 1]:
+        return "Pinky up"
+    elif fingers == [0, 0, 0, 1, 0]:
+        return "Ring up"
+    elif fingers == [1, 1, 0, 0, 1]:
+        return "Spider-Man"
+    elif fingers == [1, 1, 1, 0, 0]:
+        return "Ninja Turtle"
+    elif fingers == [1, 1, 0, 0, 0]:
+        return "L"
+    else:
+        return "No Gesture"
 
 while True:
     # reads image from camera
     success, img = cap.read()
-    img = detector.findhands(img)
-    lmList = detector.findposition(img, draw= False)
-    if len(lmList) != 0: # check to see if there is a hand present before printing
-        print(lmList[4], lmList[8], lmList[12], lmList[16], lmList[20])
+    hands, img = detector.findHands(img)
 
-        x1, y1 = lmList[4][1], lmList[4][2]
-        x2, y2 = lmList[8][1], lmList[8][2]
-        x3, y3 = lmList[12][1], lmList[12][2]
-        x4, y4 = lmList[16][1], lmList[16][2]
-        x5, y5 = lmList[20][1], lmList[20][2]
+    if hands:
+        hand1 = hands[0]
+        lmList1 = hand1["lmList"]
+        bbox1 = hand1["bbox"]
+        centerPoint1 = hand1["center"]
+        handType1 = hand1["type"]
 
-        cv2.circle(img, (x1, y1), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x2, y2), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x3, y3), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x4, y4), 15, (255, 0, 255), cv2.FILLED)
-        cv2.circle(img, (x5, y5), 15, (255, 0, 255), cv2.FILLED)
+        fingers1 = detector.fingersUp(hand1)
+        handPositionStrings(fingers1)
 
-    cTime = time.time()
-    fps = 1 / (cTime - pTime)
-    pTime = cTime
+        cTime = time.time()
+        fps = 1 / (cTime - pTime)
+        pTime = cTime
 
-    cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
-    cv2.putText(img, str("Gesture"), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+        cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, str("Gesture"), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        cv2.putText(img, handPositionStrings(fingers1), (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        #print(fingers1)
+
+        # if len(hands)==2:
+        #     hand2 = hands[1]
+        #     lmList2 = hand2["lmList"]
+        #     bbox2 = hand2["bbox"]
+        #     centerPoint2 = hand2["center"]
+        #     handType2 = hand2["type"]
+        #
+        #     fingers2 = detector.fingersUp(hand2)
+        #     print(fingers1, fingers2)
+
+
+    # cTime = time.time()
+    # fps = 1 / (cTime - pTime)
+    # pTime = cTime
+    #
+    # cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+    # cv2.putText(img, str("Gesture"), (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+    # cv2.putText(img, handPositionStrings(fingers1), (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
