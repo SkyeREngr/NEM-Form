@@ -41,25 +41,24 @@ while True:
                 h, w, c = img.shape
                 # gives position of center
                 cx, cy = int(lm.x*w), int(lm.y*h)
-                match id:
-                    case 4:
-                        cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #thumb
-                        print("Thumb Coordinates: ", cx, cy)
-                    case 8:
-                        cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #index
-                        print("Index Coordinates: ", cx, cy)
-                    case 12:
-                        cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #middle
-                        print("Middle Coordinates: ", cx, cy)
-                    case 16:
-                        cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #ring
-                        print("Ring Coordinates: ", cx, cy)
-                    case 20:
-                        cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #pinky
-                        print("Pinky Coordinates: ", cx, cy)
+                # match id:
+                #     case 4:
+                #         cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #thumb
+                #         print("Thumb Coordinates: ", cx, cy)
+                #     case 8:
+                #         cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #index
+                #         print("Index Coordinates: ", cx, cy)
+                #     case 12:
+                #         cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #middle
+                #         print("Middle Coordinates: ", cx, cy)
+                #     case 16:
+                #         cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #ring
+                #         print("Ring Coordinates: ", cx, cy)
+                #     case 20:
+                #         cv2.circle(img, (int(cx), int(cy)), 10, (255, 0, 255), cv2.FILLED) #pinky
+                #         print("Pinky Coordinates: ", cx, cy)
             # draw skeleton mesh onto hand
             mpDraw.draw_landmarks(img, handLms, mpHands.HAND_CONNECTIONS)
-#h
 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
